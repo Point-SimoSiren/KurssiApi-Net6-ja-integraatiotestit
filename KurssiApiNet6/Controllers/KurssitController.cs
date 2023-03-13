@@ -11,15 +11,25 @@ namespace KurssiApiNet6.Controllers
     {
         private KurssiDBContext db = new KurssiDBContext();
 
+
+        // Palauttaa stringin: Hello World! - Polku on api/hello
+        [HttpGet]
+        [Route("hello")]
+        public string SayHelloWorld()
+        {
+            return "Hello World!";
+        }
+
+
         // Hae kaikki kurssit
         [HttpGet]
         [Route("")]
-        public List<Kurssit> HaeKurssit()
+        public ActionResult HaeKurssit()
         {
             try
             {
                 List<Kurssit> kurssit = db.Kurssit.ToList();
-                return kurssit;
+                return Ok(kurssit);
             }
             finally
             {

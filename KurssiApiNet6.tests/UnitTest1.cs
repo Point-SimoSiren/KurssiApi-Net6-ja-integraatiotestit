@@ -11,22 +11,55 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using KurssiApiNet6;
+using Newtonsoft.Json;
+using KurssiApiNet6.Models;
 
 namespace KurssiApiNet6.tests
 {
     [TestClass]
     public class UnitTest1
     {
+
         [TestMethod]
-        public async Task ReturnHello()
+        public async Task TestReturnHello()
         {
             var webAppFactory = new WebApplicationFactory<Program>();
-            var httpClient = webAppFactory.CreateDefaultClient();
+            var client = webAppFactory.CreateDefaultClient();
 
-            var response = await httpClient.GetAsync("api/kurssit/hello");
+            var response = await client.GetAsync("api/kurssit/hello");
             var stringResult = await response.Content.ReadAsStringAsync();
 
             Assert.AreEqual("Hello World!", stringResult);
         }
+
+
+        [TestMethod]
+        public async Task TestGetKurssit()
+        {
+            var webAppFactory = new WebApplicationFactory<Program>();
+            var httpClient = webAppFactory.CreateDefaultClient();
+
+            var response = await httpClient.GetAsync("api/kurssit");
+            var json = await response.Content.ReadAsStringAsync();
+
+            IEnumerable<Kurssit> kurssit = JsonConvert.DeserializeObject<Kurssit[]>(json);
+
+            Assert.AreEqual(8, kurssit.Count() );
+
+        }
+
+        [TestMethod]
+        public async Task TestGetKurssitStatusCode()
+        {
+            var webAppFactory = new WebApplicationFactory<Program>();
+            var httpClient = webAppFactory.CreateDefaultClient();
+
+            var response = await httpClient.GetAsync("api/kurssit");
+ 
+            Assert.AreEqual(response.StatusCode.ToString().ToLower(), "ok");
+
+        }
+
+
     }
 }

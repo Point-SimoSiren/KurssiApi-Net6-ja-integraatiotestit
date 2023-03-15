@@ -12,29 +12,12 @@ namespace KurssiApiNet6.Controllers
         private KurssiDBContext db = new KurssiDBContext();
 
 
-        // Palauttaa stringin: Hello World! - Polku on api/hello
-        [HttpGet]
-        [Route("hello")]
-        public string SayHelloWorld()
-        {
-            return "Hello World!";
-        }
-
-
         // Hae kaikki kurssit
         [HttpGet]
-        [Route("")]
         public ActionResult HaeKurssit()
         {
-            try
-            {
                 List<Kurssit> kurssit = db.Kurssit.ToList();
                 return Ok(kurssit);
-            }
-            finally
-            {
-                db.Dispose();
-            }
         }
 
 
@@ -42,19 +25,12 @@ namespace KurssiApiNet6.Controllers
         [HttpGet]
         [Route("{id}")]
         public Kurssit GetOneById(int id)
-        {
-            try
-            {
+        {   
                 Kurssit kurssi = db.Kurssit.Find(id);
                 return kurssi;
-            }
-            finally
-            {
-                db.Dispose();
-            }
-        }
-
-
+         }
+       
+        
         // Uuden luonti
         [HttpPost]
         [Route("")]
@@ -70,10 +46,7 @@ namespace KurssiApiNet6.Controllers
             {
                 return BadRequest(ex);
             }
-            finally
-            {
-                db.Dispose();
-            }
+        
         }
 
 
@@ -100,10 +73,7 @@ namespace KurssiApiNet6.Controllers
             {
                 return BadRequest();
             }
-            finally
-            {
-                db.Dispose();
-            }
+         
         }
 
     }
